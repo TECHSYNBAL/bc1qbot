@@ -1,8 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 import httpx
 import os
+import json
 
 app = FastAPI()
 
@@ -34,63 +36,70 @@ async def root():
     return {"status": "ok", "message": "AI Chat API is running"}
 
 
-@app.post("/api/chat", response_model=ChatResponse)
+@app.post("/api/chat")
 async def chat(request: ChatRequest):
     """
-    Send a message to Ollama and return the AI response
+    Send a message to Ollama and return the AI response (streaming to avoid timeouts)
     """
     if not request.message or not request.message.strip():
         raise HTTPException(status_code=400, detail="Message cannot be empty")
     
-    try:
-        # Call Ollama API with optimized parameters for faster responses
-        async with httpx.AsyncClient(timeout=25.0) as client:
-            response = await client.post(
-                f"{OLLAMA_URL}/api/generate",
-                json={
-                    "model": OLLAMA_MODEL,
-                    "prompt": request.message,
-                    "stream": False,
-                    "options": {
-                        "num_predict": 50,   # Very short responses for speed
-                        "temperature": 0.5,  # Lower temperature for faster, focused responses
-                        "num_thread": 2,     # Limit CPU threads
+    async def generate_response():
+        try:
+            # Call Ollama API with streaming enabled
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                async with client.stream(
+                    "POST",
+                    f"{OLLAMA_URL}/api/generate",
+                    json={
+                        "model": OLLAMA_MODEL,
+                        "prompt": request.message,
+                        "stream": True,  # Enable streaming
+                        "options": {
+                            "num_predict": 100,  # Limit response length
+                            "temperature": 0.7,
+                            "num_thread": 2,
+                        }
                     }
-                }
-            )
-            
-            # Check status and get error details if failed
-            if response.status_code != 200:
-                error_detail = "Unknown error"
-                try:
-                    error_data = response.json()
-                    error_detail = error_data.get("error", str(response.text))
-                except:
-                    error_detail = response.text[:500]  # Limit error message length
-                
-                raise HTTPException(
-                    status_code=503,
-                    detail=f"Ollama error (status {response.status_code}): {error_detail}"
-                )
-            
-            result = response.json()
-            
-            # Extract the response text
-            ai_response = result.get("response", "No response generated")
-            
-            return ChatResponse(response=ai_response)
+                ) as response:
+                    if response.status_code != 200:
+                        error_detail = "Unknown error"
+                        try:
+                            error_text = await response.aread()
+                            error_data = json.loads(error_text)
+                            error_detail = error_data.get("error", str(error_text))
+                        except:
+                            error_detail = str(response.status_code)
+                        
+                        yield json.dumps({"error": f"Ollama error: {error_detail}"}) + "\n"
+                        return
+                    
+                    full_response = ""
+                    async for line in response.aiter_lines():
+                        if line:
+                            try:
+                                data = json.loads(line)
+                                if "response" in data:
+                                    token = data["response"]
+                                    full_response += token
+                                    # Send each token as it's generated
+                                    yield json.dumps({"token": token, "done": data.get("done", False)}) + "\n"
+                                
+                                if data.get("done", False):
+                                    # Send final complete response
+                                    yield json.dumps({"response": full_response, "done": True}) + "\n"
+                                    break
+                            except json.JSONDecodeError:
+                                continue
+        
+        except httpx.TimeoutException:
+            yield json.dumps({"error": "Request timeout - AI model took too long to respond"}) + "\n"
+        except httpx.RequestError as e:
+            yield json.dumps({"error": f"Cannot connect to Ollama at {OLLAMA_URL}. Error: {str(e)}"}) + "\n"
+        except Exception as e:
+            yield json.dumps({"error": f"Internal server error: {str(e)}"}) + "\n"
     
-    except HTTPException:
-        raise  # Re-raise HTTP exceptions
-    except httpx.TimeoutException:
-        raise HTTPException(status_code=504, detail="Request timeout - AI model took too long to respond")
-    except httpx.RequestError as e:
-        raise HTTPException(
-            status_code=503, 
-            detail=f"Cannot connect to Ollama at {OLLAMA_URL}. Make sure Ollama is running. Error: {str(e)}"
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    return StreamingResponse(generate_response(), media_type="application/x-ndjson")
 
 
 if __name__ == "__main__":
