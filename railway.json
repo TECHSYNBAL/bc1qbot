@@ -4,6 +4,9 @@
     {
       "name": "frontend",
       "source": "./front",
+      "watchPatterns": [
+        "front/**"
+      ],
       "build": {
         "builder": "NIXPACKS",
         "buildCommand": "flutter pub get && flutter build web --release"
@@ -17,6 +20,9 @@
     {
       "name": "ai",
       "source": "./ai",
+      "watchPatterns": [
+        "ai/**"
+      ],
       "build": {
         "builder": "DOCKERFILE",
         "dockerfilePath": "Dockerfile"
