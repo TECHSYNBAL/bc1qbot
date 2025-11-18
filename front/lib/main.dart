@@ -4,6 +4,28 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'analytics.dart';
 
+class DiagonalLinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (size.width == 0 || size.height == 0) return;
+
+    final paint = Paint()
+      ..color = const Color(0xFFE4E4E4)
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+
+    // Draw line from bottom-left to top-right
+    canvas.drawLine(
+      Offset(0, size.height), // Bottom-left
+      Offset(size.width, 0), // Top-right
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
 void main() {
   runApp(const MyApp());
 }
@@ -40,73 +62,90 @@ class _MyAppState extends State<MyApp> {
           bodyLarge: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           bodyMedium: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           bodySmall: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           displayLarge: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           displayMedium: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           displaySmall: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           headlineLarge: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           headlineMedium: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           headlineSmall: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           titleLarge: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           titleMedium: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           titleSmall: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           labelLarge: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           labelMedium: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           labelSmall: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           labelStyle: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
           hintStyle: TextStyle(
               fontFamily: 'Aeroport',
               fontSize: 15,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
         ),
       ),
       debugShowCheckedModeBanner: false,
@@ -215,8 +254,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  padding: const EdgeInsets.only(
+                      top: 30, bottom: 15, left: 15, right: 15),
                   decoration: const BoxDecoration(
                     color: Colors.black,
                   ),
@@ -258,7 +297,7 @@ class _HomePageState extends State<HomePage> {
                               cursor: SystemMouseCursors.click,
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 16.0),
+                                    vertical: 5.0, horizontal: 15.0),
                                 child: Text(
                                   'What is my all wallet\'s last month profit',
                                   style: TextStyle(
@@ -296,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                               cursor: SystemMouseCursors.click,
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 16.0),
+                                    vertical: 5.0, horizontal: 15.0),
                                 child: Text(
                                   'Advise me a token to buy',
                                   style: TextStyle(
@@ -314,354 +353,631 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 if (!_isFocused)
-                  Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(20),
-                        child: Column(children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text('Sell',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w300,
-                                    color: Color(0xFF818181),
-                                    fontSize: 20,
-                                  )),
-                              SizedBox(
-                                height: 20,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Column(
+                                children: [
+                                  const Stack(
+                                    alignment: Alignment.center,
                                     children: [
-                                      Image.asset('assets/sample/1.png',
-                                          width: 20,
-                                          height: 20,
-                                          fit: BoxFit.contain),
-                                      const SizedBox(width: 5),
-                                      Image.asset('assets/sample/2.png',
-                                          width: 20,
-                                          height: 20,
-                                          fit: BoxFit.contain),
-                                      const SizedBox(width: 5),
-                                      Image.asset('assets/sample/3.png',
-                                          width: 20,
-                                          height: 20,
-                                          fit: BoxFit.contain),
-                                      const SizedBox(width: 5),
-                                      Image.asset('assets/sample/4.png',
-                                          width: 20,
-                                          height: 20,
-                                          fit: BoxFit.contain),
-                                      const SizedBox(width: 5),
-                                      Image.asset('assets/sample/5.png',
-                                          width: 20,
-                                          height: 20,
-                                          fit: BoxFit.contain),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('ton/usdt',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                color: Color(0xFF818181),
+                                                fontSize: 20,
+                                              )),
+                                          SizedBox.shrink(),
+                                          Text(
+                                            '+300.70%',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text("d"),
+                                          SizedBox(width: 15),
+                                          Text("h"),
+                                          SizedBox(width: 15),
+                                          Text("q"),
+                                          SizedBox(width: 15),
+                                          Text(
+                                            "m",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text('1',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 30,
-                                    color: Color(0xFFE4E4E4),
-                                  )),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/sample/usdt.png',
-                                      width: 20,
-                                      height: 20,
-                                      fit: BoxFit.contain),
-                                  const SizedBox(width: 8),
-                                  const Text('usdt',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        color: Color(0xFFE4E4E4),
-                                        fontSize: 20,
-                                      )),
-                                  const SizedBox(width: 8),
-                                  SvgPicture.asset(
-                                    'assets/icons/select.svg',
-                                    width: 5,
-                                    height: 10,
-                                    colorFilter: const ColorFilter.mode(
-                                      Color(0xFFE4E4E4),
-                                      BlendMode.srcIn,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(r'$1',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15,
-                                      color: Color(0xFF818181),
-                                    )),
-                                Text('On TON',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15,
-                                      color: Color(0xFF818181),
-                                    )),
-                              ]),
-                        ]),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        child: SvgPicture.asset(
-                          'assets/icons/rotate.svg',
-                          width: 30,
-                          height: 30,
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        child: Column(children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text('Buy',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w300,
-                                    color: Color(0xFF818181),
-                                    fontSize: 20,
-                                  )),
-                              SizedBox(
-                                height: 20,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
+                                  const SizedBox(height: 5),
+                                  const Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                      Image.asset('assets/sample/1.png',
-                                          width: 20,
-                                          height: 20,
-                                          fit: BoxFit.contain),
-                                      const SizedBox(width: 5),
-                                      Image.asset('assets/sample/2.png',
-                                          width: 20,
-                                          height: 20,
-                                          fit: BoxFit.contain),
-                                      const SizedBox(width: 5),
-                                      Image.asset('assets/sample/3.png',
-                                          width: 20,
-                                          height: 20,
-                                          fit: BoxFit.contain),
-                                      const SizedBox(width: 5),
-                                      Image.asset('assets/sample/4.png',
-                                          width: 20,
-                                          height: 20,
-                                          fit: BoxFit.contain),
-                                      const SizedBox(width: 5),
-                                      Image.asset('assets/sample/5.png',
-                                          width: 20,
-                                          height: 20,
-                                          fit: BoxFit.contain),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'FDV',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '\$3.1K',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'LIQ',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '\$1.1K',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'VOL',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '\$3.1K',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'TXNS',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '\$7K',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '1 H',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '+208.13%',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '6 H',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '+208.13%',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Color(0xFF818181),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text('1',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 30,
-                                    color: Color(0xFFE4E4E4),
-                                  )),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/sample/ton.png',
-                                      width: 20,
-                                      height: 20,
-                                      fit: BoxFit.contain),
-                                  const SizedBox(width: 8),
-                                  const Text('ton',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        color: Color(0xFFE4E4E4),
-                                        fontSize: 20,
-                                      )),
-                                  const SizedBox(width: 8),
-                                  SvgPicture.asset(
-                                    'assets/icons/select.svg',
-                                    width: 5,
-                                    height: 10,
-                                    colorFilter: const ColorFilter.mode(
-                                      Color(0xFFE4E4E4),
-                                      BlendMode.srcIn,
+                                  const SizedBox(height: 5),
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                child: SizedBox.expand(
+                                                  child: CustomPaint(
+                                                    painter:
+                                                        DiagonalLinePainter(),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 5),
+                                              const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "12.37",
+                                                    style: TextStyle(
+                                                        fontSize: 10,
+                                                        color:
+                                                            Color(0xFF818181)),
+                                                  ),
+                                                  Text("14.40",
+                                                      style: TextStyle(
+                                                          fontSize: 10,
+                                                          color: Color(
+                                                              0xFF818181))),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        const Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "0.05678",
+                                              style: TextStyle(
+                                                  color: Color(0xFF818181),
+                                                  fontSize: 10),
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  "0.03678",
+                                                  style: TextStyle(
+                                                    color: Color(0xFF818181),
+                                                    fontSize: 10,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 15,
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ),
+                                  )
                                 ],
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(r'$1',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15,
-                                      color: Color(0xFF818181),
-                                    )),
-                                Text('On TON',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15,
-                                      color: Color(0xFF818181),
-                                    )),
-                              ]),
-                          const SizedBox(height: 15),
-                          const Row()
-                        ]),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/connect.svg',
-                                      width: 20,
-                                      height: 20,
-                                      colorFilter: const ColorFilter.mode(
-                                        Color(0xFFE4E4E4),
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    const SizedBox(
-                                      height: 20,
-                                      child: Center(
-                                        child: Text(
-                                          'Connect',
-                                          style: TextStyle(
-                                            color: Color(0xFFE4E4E4),
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 15),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/create.svg',
-                                      width: 20,
-                                      height: 20,
-                                      colorFilter: const ColorFilter.mode(
-                                        Color(0xFFE4E4E4),
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    const SizedBox(
-                                      height: 20,
-                                      child: Center(
-                                        child: Text(
-                                          'Create',
-                                          style: TextStyle(
-                                            color: Color(0xFFE4E4E4),
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 15),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/import.svg',
-                                      width: 20,
-                                      height: 20,
-                                      colorFilter: const ColorFilter.mode(
-                                        Color(0xFFE4E4E4),
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    const SizedBox(
-                                      height: 20,
-                                      child: Center(
-                                        child: Text(
-                                          'Import',
-                                          style: TextStyle(
-                                            color: Color(0xFFE4E4E4),
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const Center(
-                              child: Text(
-                                'wallet',
-                                style: TextStyle(
-                                  color: Color(0xFF818181),
-                                  fontSize: 20,
-                                ),
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(
+                              top: 15, bottom: 0, left: 15, right: 15),
+                          child: Column(children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text('Sell',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      color: Color(0xFF818181),
+                                      fontSize: 20,
+                                    )),
+                                SizedBox(
+                                  height: 20,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        Image.asset('assets/sample/1.png',
+                                            width: 20,
+                                            height: 20,
+                                            fit: BoxFit.contain),
+                                        const SizedBox(width: 5),
+                                        Image.asset('assets/sample/2.png',
+                                            width: 20,
+                                            height: 20,
+                                            fit: BoxFit.contain),
+                                        const SizedBox(width: 5),
+                                        Image.asset('assets/sample/3.png',
+                                            width: 20,
+                                            height: 20,
+                                            fit: BoxFit.contain),
+                                        const SizedBox(width: 5),
+                                        Image.asset('assets/sample/4.png',
+                                            width: 20,
+                                            height: 20,
+                                            fit: BoxFit.contain),
+                                        const SizedBox(width: 5),
+                                        Image.asset('assets/sample/5.png',
+                                            width: 20,
+                                            height: 20,
+                                            fit: BoxFit.contain),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 15),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text('1',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20,
+                                      color: Color(0xFFE4E4E4),
+                                    )),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset('assets/sample/usdt.png',
+                                        width: 20,
+                                        height: 20,
+                                        fit: BoxFit.contain),
+                                    const SizedBox(width: 8),
+                                    const Text('usdt',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: Color(0xFFE4E4E4),
+                                          fontSize: 20,
+                                        )),
+                                    const SizedBox(width: 8),
+                                    SvgPicture.asset(
+                                      'assets/icons/select.svg',
+                                      width: 5,
+                                      height: 10,
+                                      colorFilter: const ColorFilter.mode(
+                                        Color(0xFFE4E4E4),
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 15),
+                            const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(r'$1',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                        color: Color(0xFF818181),
+                                      )),
+                                  Text('On TON',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                        color: Color(0xFF818181),
+                                      )),
+                                ]),
+                          ]),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 15),
+                          child: SvgPicture.asset(
+                            'assets/icons/rotate.svg',
+                            width: 30,
+                            height: 30,
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(
+                              top: 0, bottom: 0, left: 15, right: 15),
+                          child: Column(children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text('Buy',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      color: Color(0xFF818181),
+                                      fontSize: 20,
+                                    )),
+                                SizedBox(
+                                  height: 20,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        Image.asset('assets/sample/1.png',
+                                            width: 20,
+                                            height: 20,
+                                            fit: BoxFit.contain),
+                                        const SizedBox(width: 5),
+                                        Image.asset('assets/sample/2.png',
+                                            width: 20,
+                                            height: 20,
+                                            fit: BoxFit.contain),
+                                        const SizedBox(width: 5),
+                                        Image.asset('assets/sample/3.png',
+                                            width: 20,
+                                            height: 20,
+                                            fit: BoxFit.contain),
+                                        const SizedBox(width: 5),
+                                        Image.asset('assets/sample/4.png',
+                                            width: 20,
+                                            height: 20,
+                                            fit: BoxFit.contain),
+                                        const SizedBox(width: 5),
+                                        Image.asset('assets/sample/5.png',
+                                            width: 20,
+                                            height: 20,
+                                            fit: BoxFit.contain),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 15),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text('1',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20,
+                                      color: Color(0xFFE4E4E4),
+                                    )),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset('assets/sample/ton.png',
+                                        width: 20,
+                                        height: 20,
+                                        fit: BoxFit.contain),
+                                    const SizedBox(width: 8),
+                                    const Text('ton',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: Color(0xFFE4E4E4),
+                                          fontSize: 20,
+                                        )),
+                                    const SizedBox(width: 8),
+                                    SvgPicture.asset(
+                                      'assets/icons/select.svg',
+                                      width: 5,
+                                      height: 10,
+                                      colorFilter: const ColorFilter.mode(
+                                        Color(0xFFE4E4E4),
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 15),
+                            const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(r'$1',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                        color: Color(0xFF818181),
+                                      )),
+                                  Text('On TON',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                        color: Color(0xFF818181),
+                                      )),
+                                ]),
+                          ]),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 15, bottom: 0, left: 15, right: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/icons/connect.svg',
+                                        width: 20,
+                                        height: 20,
+                                        colorFilter: const ColorFilter.mode(
+                                          Color(0xFFE4E4E4),
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      const SizedBox(
+                                        height: 20,
+                                        child: Center(
+                                          child: Text(
+                                            'Connect',
+                                            style: TextStyle(
+                                              color: Color(0xFFE4E4E4),
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/icons/create.svg',
+                                        width: 20,
+                                        height: 20,
+                                        colorFilter: const ColorFilter.mode(
+                                          Color(0xFFE4E4E4),
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      const SizedBox(
+                                        height: 20,
+                                        child: Center(
+                                          child: Text(
+                                            'Create',
+                                            style: TextStyle(
+                                              color: Color(0xFFE4E4E4),
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/icons/import.svg',
+                                        width: 20,
+                                        height: 20,
+                                        colorFilter: const ColorFilter.mode(
+                                          Color(0xFFE4E4E4),
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      const SizedBox(
+                                        height: 20,
+                                        child: Center(
+                                          child: Text(
+                                            'Import',
+                                            style: TextStyle(
+                                              color: Color(0xFFE4E4E4),
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const Center(
+                                child: Text(
+                                  'wallet',
+                                  style: TextStyle(
+                                    color: Color(0xFF818181),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.only(
+                      top: 15, bottom: 30, left: 15, right: 15),
                   decoration: const BoxDecoration(
                     color: Colors.black,
                   ),

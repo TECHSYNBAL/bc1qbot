@@ -118,12 +118,12 @@ async def ensure_user_handler(update: Update, context: ContextTypes.DEFAULT_TYPE
 async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # Create inline keyboard with button
     keyboard = [
-        [InlineKeyboardButton("Run app", url="https://t.me/xp7ktestbot/app")]
+        [InlineKeyboardButton("Run app", url="https://t.me/xp7ktestbot/app?mode=fullscreen")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     await update.message.reply_text(
-        f"Hello, {update.effective_user.first_name}. I'm xp7k, proceed to the app or ask me everything",
+        f"Hello, {update.effective_user.first_name}. I'm xp7k, proceed to the app or ask me anything",
         reply_markup=reply_markup
     )
 
